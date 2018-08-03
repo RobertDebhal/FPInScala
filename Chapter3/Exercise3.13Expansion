@@ -1,0 +1,8 @@
+foldRightViaFoldLeft(List(1,2,3),0)(_ + _)
+foldLeft(reverse(Cons(1,Cons(2,Cons(3,Nil)))),0)((acc,h) => (h,acc) => (h + acc))
+foldLeft(Cons(3,Cons(2,Cons(1,Nil))),0)((acc,h) => (h,acc) => (h + acc))
+foldLeft(Cons(2,Cons(1,Nil)),3)((acc,h) => (h,acc) => (h + acc))
+foldLeft(Cons(1,Nil),5)((acc,h) => (h,acc) => (h + acc))
+foldLeft(Nil,6)((acc,h) => (h,acc) => (h + acc))
+6
+
