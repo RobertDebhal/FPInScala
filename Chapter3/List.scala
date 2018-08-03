@@ -136,18 +136,49 @@ object List {
     // converting from the standard Scala list to the list we've defined here
   }
 
+  //exercise 3.19
   def filter[A](as: List[A])(f: A => Boolean): List[A] =
     foldRightViaFoldLeft(as,Nil:List[A])((h,t) => if (f(h)) Cons(h,t) else t)  
 
+  //exercise 3.20
   def flatMap[A,B](as: List[A])(f: A => List[B]): List[B] =
     foldRightViaFoldLeft(as,Nil:List[B])((l,r) => append(f(l),r))
 
+  //exercise 3.21
   def filterViaFlatMap[A](as: List[A])(f: A => Boolean): List[A] =
     flatMap(as)((a => if (f(a)) List(a) else Nil))
 
+  //exercise 3.22
   def addPairwise(a: List[Int], b: List[Int]): List[Int] = (a,b) match { 
     case (Nil, _) => Nil
     case (_, Nil) => Nil
     case (Cons(h1,t1), Cons(h2,t2)) => Cons(h1+h2, addPairwise(t1,t2))
   }
+
+  def zipWith[A,B,C](a: List[A], b: List[B])(f: (A,B) => C): List[C] = (a,b) match {
+    case (Nil,_) => Nil
+    case (_,Nil) => Nil
+    case (Cons(h1,t1),Cons(h2,t2)) => Cons(f(h1,h2),zipWith(t1,t2)(f))
+  }
+
+  @annotation.tailrec
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean =
+    sup match {
+      case Nil => sub == Nil
+      case _ => (sup,sub) match {
+        case (Cons(h1,t1),Cons(h2,t2)) =>
+          if (h1 == h2) {
+            filter(zipWith(t1, t2)((a, b) => a == b))(_ == false) match {
+              case Nil => true
+              case _ => hasSubsequence(t1, sub)
+            }
+          }
+          else
+            hasSubsequence(t1, sub)
+        case (_,Nil) => true
+        case (Nil,_) => false
+      }
+    }
+
+
 }
